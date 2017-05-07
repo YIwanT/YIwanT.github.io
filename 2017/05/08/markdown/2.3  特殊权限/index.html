@@ -1,0 +1,442 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>2.3  特殊权限 | YIwanT&#39;blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="YIwanT">
+    
+
+    
+    <meta name="description" content="特殊权限 umask的第一个值表示默认的特殊权限 特殊权限为s，作用是赋予使用命令的人临时的权限，权限属于root特殊权限也可以用数字表示  uid = 4 gid = 2 stick_bit = 1  uid 权限在Linux下可以使用passwd更改用户密码，存放密码的文件为/etc/shadow，所有人都不可以对他进行读写，root用户除外。 [root@centos ~]# ls -l /">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2.3  特殊权限">
+<meta property="og:url" content="http://yoursite.com/2017/05/08/markdown/2.3  特殊权限/index.html">
+<meta property="og:site_name" content="YIwanT&#39;blog">
+<meta property="og:description" content="特殊权限 umask的第一个值表示默认的特殊权限 特殊权限为s，作用是赋予使用命令的人临时的权限，权限属于root特殊权限也可以用数字表示  uid = 4 gid = 2 stick_bit = 1  uid 权限在Linux下可以使用passwd更改用户密码，存放密码的文件为/etc/shadow，所有人都不可以对他进行读写，root用户除外。 [root@centos ~]# ls -l /">
+<meta property="og:updated_time" content="2017-05-07T16:56:00.006Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2.3  特殊权限">
+<meta name="twitter:description" content="特殊权限 umask的第一个值表示默认的特殊权限 特殊权限为s，作用是赋予使用命令的人临时的权限，权限属于root特殊权限也可以用数字表示  uid = 4 gid = 2 stick_bit = 1  uid 权限在Linux下可以使用passwd更改用户密码，存放密码的文件为/etc/shadow，所有人都不可以对他进行读写，root用户除外。 [root@centos ~]# ls -l /">
+
+    
+    <link rel="alternative" href="atom.xml" title="YIwanT&#39;blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/timgw.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/1212.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/1212.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/123.png" alt="YIwanT&#39;blog" title="YIwanT&#39;blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="YIwanT&#39;blog">YIwanT&#39;blog</a></h1>
+				<h2 class="blog-motto">腹有诗书气自华</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/categories">分类</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/08/markdown/2.3  特殊权限/" title="2.3  特殊权限" itemprop="url">2.3  特殊权限</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YIwanT" target="_blank" itemprop="author">YIwanT</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-07T17:17:30.250Z" itemprop="datePublished"> 发表于 2017-05-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#特殊权限"><span class="toc-number">1.</span> <span class="toc-text">特殊权限</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#uid-权限"><span class="toc-number">1.1.</span> <span class="toc-text">uid 权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gid-权限"><span class="toc-number">1.2.</span> <span class="toc-text">gid 权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#stick-bit权限（防删除位）"><span class="toc-number">1.3.</span> <span class="toc-text">stick_bit权限（防删除位）</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="特殊权限"><a href="#特殊权限" class="headerlink" title="特殊权限"></a>特殊权限</h1><hr>
+<p>umask的第一个值表示默认的特殊权限</p>
+<p>特殊权限为s，作用是赋予使用命令的人临时的权限，权限属于root<br>特殊权限也可以用数字表示</p>
+<ul>
+<li>uid = 4</li>
+<li>gid = 2</li>
+<li>stick_bit = 1</li>
+</ul>
+<h2 id="uid-权限"><a href="#uid-权限" class="headerlink" title="uid 权限"></a>uid 权限</h2><p>在Linux下可以使用passwd更改用户密码，存放密码的文件为/etc/shadow，所有人都不可以对他进行读写，root用户除外。</p>
+<pre><code>[root@centos ~]# ls -l /etc/shadow
+----------. 1 root root 1067 4月  10 07:38 /etc/shadow
+</code></pre><p>赋予可以读的特殊权限</p>
+<blockquote>
+<p>chmod 4000 /etc/shadow</p>
+<p>chmod u+s /etc/shadow</p>
+</blockquote>
+<pre><code>[root@centos ~]# ls -l /etc/shadow
+---S------. 1 root root 1067 4月  10 07:38 /etc/shadow
+</code></pre><p>注：S代表没有执行权，s代表有执行权</p>
+<p>切换一个用户，可以进行读取</p>
+<pre><code>[awan@centos root]$ cat /etc/shadow
+root:$6$jYD.9IcbsTqad3c7$k7xd8MReOVL8/E
+</code></pre><hr>
+<h2 id="gid-权限"><a href="#gid-权限" class="headerlink" title="gid 权限"></a>gid 权限</h2><hr>
+<blockquote>
+<p>chmod 2000 /etc/shadow</p>
+<p>chmod g+s /etc/shadow</p>
+<p>chmod g=rwxs /etc/shadow</p>
+</blockquote>
+<hr>
+<h2 id="stick-bit权限（防删除位）"><a href="#stick-bit权限（防删除位）" class="headerlink" title="stick_bit权限（防删除位）"></a>stick_bit权限（防删除位）</h2><hr>
+<p>用于防止别人删除自己的文件</p>
+<p>由于Linux下所有的目录都有执行权，都是可以写的，意味着可以删除目录下的任何文件，包括root的文件，所有有必要设置防删除位。</p>
+<blockquote>
+<p>chmod 1000 /etc/shadow</p>
+<p>chmod o＋t  /etc/shadow</p>
+</blockquote>
+<p>注：t表示有执行权，T表示没有执行权</p>
+<pre><code>[root@centos ~]# chmod 1000 /etc/shadow
+[root@centos ~]# ls -l !$
+ls -l /etc/shadow
+---------T. 1 root root 1067 4月  10 07:38 /etc/shadow
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux学习/">Linux学习</a>
+</div>
+
+
+</div>
+
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/05/08/markdown/2.2  文件和目录属性/" title="2.2  文件和目录属性">
+  <span>
+  2.2  文件和目录属性</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/05/08/markdown/2.1  文件和目录/"  title="2.1 文件和目录">
+ <span>2.1 文件和目录
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/1812648660" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/YIwanT" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Linux学习/" title="Linux学习">Linux学习<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/一些实战记录/" title="一些实战记录">一些实战记录<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/个人思考/" title="个人思考">个人思考<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+		
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2017 
+		
+		<a href="/about" target="_blank" title="YIwanT">YIwanT</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,509 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>1.2 连接centos系统 | YIwanT&#39;blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="YIwanT">
+    
+
+    
+    <meta name="description" content="配置IP地址 环境说明：  网关地址为192.168.1.1 虚拟机网卡的网络适配器连接方式为：桥接模式 系统为centos6.5 配置IP地址为192.168.1.168  可以直接使用命令获取动态ip地址（重启后消失）    dhclient  编辑网卡配置文件可以设置静态IP地址（推荐）    vim /etc/sysconfig/network-scripts/ifcfg-eth0  提示">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1.2 连接centos系统">
+<meta property="og:url" content="http://yoursite.com/2017/05/08/markdown/1.2  连接centos系统/index.html">
+<meta property="og:site_name" content="YIwanT&#39;blog">
+<meta property="og:description" content="配置IP地址 环境说明：  网关地址为192.168.1.1 虚拟机网卡的网络适配器连接方式为：桥接模式 系统为centos6.5 配置IP地址为192.168.1.168  可以直接使用命令获取动态ip地址（重启后消失）    dhclient  编辑网卡配置文件可以设置静态IP地址（推荐）    vim /etc/sysconfig/network-scripts/ifcfg-eth0  提示">
+<meta property="og:updated_time" content="2017-05-07T16:55:44.396Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="1.2 连接centos系统">
+<meta name="twitter:description" content="配置IP地址 环境说明：  网关地址为192.168.1.1 虚拟机网卡的网络适配器连接方式为：桥接模式 系统为centos6.5 配置IP地址为192.168.1.168  可以直接使用命令获取动态ip地址（重启后消失）    dhclient  编辑网卡配置文件可以设置静态IP地址（推荐）    vim /etc/sysconfig/network-scripts/ifcfg-eth0  提示">
+
+    
+    <link rel="alternative" href="atom.xml" title="YIwanT&#39;blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/timgw.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/1212.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/1212.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/123.png" alt="YIwanT&#39;blog" title="YIwanT&#39;blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="YIwanT&#39;blog">YIwanT&#39;blog</a></h1>
+				<h2 class="blog-motto">腹有诗书气自华</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/categories">分类</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/08/markdown/1.2  连接centos系统/" title="1.2 连接centos系统" itemprop="url">1.2 连接centos系统</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="YIwanT" target="_blank" itemprop="author">YIwanT</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-07T17:17:30.244Z" itemprop="datePublished"> 发表于 2017-05-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置IP地址"><span class="toc-number">1.</span> <span class="toc-text">配置IP地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#远程工具连接"><span class="toc-number">2.</span> <span class="toc-text">远程工具连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#秘钥验证"><span class="toc-number">2.1.</span> <span class="toc-text">秘钥验证</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="配置IP地址"><a href="#配置IP地址" class="headerlink" title="配置IP地址"></a>配置IP地址</h2><hr>
+<p>环境说明：</p>
+<ul>
+<li>网关地址为192.168.1.1</li>
+<li>虚拟机网卡的网络适配器连接方式为：桥接模式</li>
+<li>系统为centos6.5</li>
+<li>配置IP地址为192.168.1.168</li>
+</ul>
+<p>可以直接使用命令获取动态ip地址（重启后消失）</p>
+<blockquote>
+<p>  dhclient</p>
+</blockquote>
+<p>编辑网卡配置文件可以设置静态IP地址（推荐）</p>
+<blockquote>
+<p>  vim /etc/sysconfig/network-scripts/ifcfg-eth0</p>
+</blockquote>
+<p>提示没有vim命令，可以只用yum命令安装</p>
+<blockquote>
+<p>  yum install -y vim-enhanced</p>
+</blockquote>
+<p>编辑网卡的配置文件</p>
+<pre><code>BOOTPROTO=static  #获取ip的方式，默认为dhcp，修改为static
+ONBOOT=yes  # 是否开机启动，默认no，修改为yes
+
+#在最后添加下面内容
+IPADDR=192.168.1.168    #IP地址
+NETMASK=255.255.255.0   #子网掩码
+GATEWAY=192.168.1.1     #网关地址
+DNS1=192.168.1.1    #DNS服务器
+DNS2=8.8.8.8
+</code></pre><p>保存退出</p>
+<p>重启网络服务</p>
+<blockquote>
+<p>  service network restart</p>
+</blockquote>
+<p>查看网卡信息</p>
+<blockquote>
+<p>  ifconfig<br>    -a   可以查看未开启的网卡</p>
+</blockquote>
+<p>出现下面结果证明配置成功</p>
+<pre><code>ens33: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+inet 192.168.1.168  netmask 255.255.255.0  broadcast 192.168.1.255
+inet6 fd91:a527:92ab:0:b42f:2ab2:5851:e2b7  prefixlen 64  scopeid 0x0&lt;gl
+</code></pre><hr>
+<h2 id="远程工具连接"><a href="#远程工具连接" class="headerlink" title="远程工具连接"></a>远程工具连接</h2><hr>
+<p>Linux远程连接工具有   putty  xshell  secureCRT</p>
+<p>putty  直接到官网就可以下载一个</p>
+<p>Host Name(or IP address)</p>
+<blockquote>
+<p>  192.168.1.168</p>
+</blockquote>
+<p>Port （端口，默认22）</p>
+<p>直接点击open，打开后输入用户名和密码就可以登录。</p>
+<p>成功登录，显示如下</p>
+<pre><code>login as: root
+root@192.168.1.168&apos;s password:
+Last login: Sun Apr 16 17:53:21 2017
+[root@localhost ~]# 
+</code></pre><p>终端工具优势</p>
+<ul>
+<li>可以上下翻看之前的记录、命令</li>
+<li>可以复制粘贴，选中内容、直接点右键就能复制出来</li>
+<li>所有的命令都跟在实体机操作一样。可以实现远程控制，比如服务器在机房，可以直接在办公室进行控制、编辑。</li>
+</ul>
+<h3 id="秘钥验证"><a href="#秘钥验证" class="headerlink" title="秘钥验证"></a>秘钥验证</h3><p>使用putty自带的工具，putty gen工具生成一对秘钥。</p>
+<ul>
+<li>生成秘钥的时候，鼠标一直动生成 速度会快很多</li>
+<li>可以更改名字、再添加一段秘钥的密码</li>
+<li>生成的私钥保存到本地，公钥复制到服务器上</li>
+</ul>
+<p>先登录到服务器，新建一个 .ssh的目录</p>
+<blockquote>
+<p>  mkdir /root/.ssh</p>
+</blockquote>
+<p>生成并编辑秘钥文件</p>
+<blockquote>
+<p>  vi /root/.ssh/authorized_keys</p>
+</blockquote>
+<p>将公钥粘贴到这个文件中，保存退出。</p>
+<p>给秘钥的目录和文件赋予权限</p>
+<blockquote>
+<p>  chmod 700 /root/.ssh/</p>
+<p>  chmod 600/root/.ssh/authorized_keys</p>
+</blockquote>
+<p>关闭防火墙selinux</p>
+<blockquote>
+<p>  setenforce 0   </p>
+</blockquote>
+<p>临时关闭  selinux</p>
+<p>永久关闭selinux防火墙需要编辑它的配置文件</p>
+<blockquote>
+<p>  vi /etc/selinux/config</p>
+</blockquote>
+<pre><code>SELINUX=disabale     #重启之后才能生效
+</code></pre><p>清除防火墙netfilter规则</p>
+<blockquote>
+<p>  iptables -F    </p>
+</blockquote>
+<p>临时清除规则，重启后还会重新加载</p>
+<blockquote>
+<p>  service iptables save     </p>
+</blockquote>
+<p>将清楚完的规则保存到配置文件中,下次启动不会启用</p>
+<p>至此服务器上配置完成，putty客户端需要在SHH设置选项中选择Auth并将保存的私钥添加进来，最后回到setting界面保存配置</p>
+<p>从新登陆出现如下提示，证明设置成功</p>
+<pre><code>login as: root
+Authenticating with public key &quot;rsa-key-20170416&quot;
+Last login: Sun Apr 16 18:56:19 2017 from hyoessgt237sg5t.lan
+[root@localhost ~]#
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux学习/">Linux学习</a>
+</div>
+
+
+</div>
+
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/05/08/markdown/1.3  运行级别/" title="1.3 运行级别">
+  <span>
+  1.3 运行级别</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/05/08/markdown/1.1   Linux的历史和发行版/"  title="1.1 Linux的历史和发行版">
+ <span>1.1 Linux的历史和发行版
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-img"></div>		
+	
+	<div class="social-info" class="clearfix">
+		
+		<a href="http://weibo.com/1812648660" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/YIwanT" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Linux学习/" title="Linux学习">Linux学习<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/一些实战记录/" title="一些实战记录">一些实战记录<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/个人思考/" title="个人思考">个人思考<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+		
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/hsihohuang/kiddochan" target="_blank" title="Kiddochan">Kiddochan</a> © 2017 
+		
+		<a href="/about" target="_blank" title="YIwanT">YIwanT</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
