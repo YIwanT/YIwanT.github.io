@@ -169,20 +169,19 @@ yum install -y python-setuptool</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2017/05/08/markdown/2.3  特殊权限/" title="2.3  特殊权限" itemprop="url">
+    <a href="/2017/05/08/markdown/2.2  文件和目录属性/" title="2.2  文件和目录属性" itemprop="url">
   
-    <h1 itemprop="name">2.3  特殊权限</h1>
+    <h1 itemprop="name">2.2  文件和目录属性</h1>
     
      
-           <p itemprop="description" >特殊权限
-umask的第一个值表示默认的特殊权限
-特殊权限为s，作用是赋予使用命令的人临时的权限，权限属于root特殊权限也可以用数字表示
+           <p itemprop="description" >属性介绍
+文件1.txt的属性如下
+[root@centos 001]# ls -l 1.txt
+-rw-r--r--. 1 root root 0 4月  20 03:33 1.txt
+一共7段信息，按顺序各段信息代表意义如下
 
-uid = 4
-gid = 2
-stick_bit = 1
-
-uid 权限在Linux下可以使用passwd更改用户密码，存放密码的文件为</p>
+表示文件类型和权限
+表示有多少个文件或者目录使用</p>
         
     
     <time datetime="2017-05-07T17:17:30.250Z" itemprop="datePublished">2017-05-08</time>
@@ -197,19 +196,20 @@ uid 权限在Linux下可以使用passwd更改用户密码，存放密码的文�
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2017/05/08/markdown/2.2  文件和目录属性/" title="2.2  文件和目录属性" itemprop="url">
+    <a href="/2017/05/08/markdown/2.3  特殊权限/" title="2.3  特殊权限" itemprop="url">
   
-    <h1 itemprop="name">2.2  文件和目录属性</h1>
+    <h1 itemprop="name">2.3  特殊权限</h1>
     
      
-           <p itemprop="description" >属性介绍
-文件1.txt的属性如下
-[root@centos 001]# ls -l 1.txt
--rw-r--r--. 1 root root 0 4月  20 03:33 1.txt
-一共7段信息，按顺序各段信息代表意义如下
+           <p itemprop="description" >特殊权限
+umask的第一个值表示默认的特殊权限
+特殊权限为s，作用是赋予使用命令的人临时的权限，权限属于root特殊权限也可以用数字表示
 
-表示文件类型和权限
-表示有多少个文件或者目录使用</p>
+uid = 4
+gid = 2
+stick_bit = 1
+
+uid 权限在Linux下可以使用passwd更改用户密码，存放密码的文件为</p>
         
     
     <time datetime="2017-05-07T17:17:30.250Z" itemprop="datePublished">2017-05-08</time>
